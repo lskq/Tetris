@@ -2,11 +2,17 @@ namespace Tetris.Model;
 
 public class Tetromino
 {
+    public int X { get; set; }
+    public int Y { get; set; }
+
     public Color Color { get; set; }
     public (int, int)[] Blocks { get; set; }
 
-    public Tetromino(Shape shape)
+    public Tetromino(int x, int y, Shape shape)
     {
+        X = x;
+        Y = y;
+
         Blocks = new (int, int)[4];
 
         // Shapes are designed with the console in mind, so top left is (0,0)
@@ -101,5 +107,4 @@ public class Tetromino
             Blocks[i] = (x, y);
         }
     }
-
 }
