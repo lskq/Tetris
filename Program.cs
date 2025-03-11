@@ -2,8 +2,21 @@
 
 class Program
 {
+
+    [STAThread]
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        try
+        {
+            Controller controller = new();
+            controller.Start();
+        }
+        catch (Exception e)
+        {
+            // For testing
+            Console.Clear();
+            Console.CursorVisible = true;
+            Console.WriteLine(e.ToString());
+        }
     }
 }
