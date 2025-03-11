@@ -35,7 +35,7 @@ public class Game
         }
 
         Tetromino.X += xInput;
-        Tetromino.Y += (yInput > 0) ? Gravity + yInput : Gravity;
+        // Tetromino.Y += (yInput > 0) ? Gravity + yInput : Gravity;
         UpdateGrid(true);
     }
 
