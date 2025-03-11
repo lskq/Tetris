@@ -3,7 +3,7 @@ namespace Tetris.Model;
 public class Game
 {
     public const int Width = 10;
-    public const int Height = 20;
+    public const int Height = 10;
     public const int XInit = Width / 2;
     public const int YInit = Height * 3 / 4;
     public const int Gravity = 1;

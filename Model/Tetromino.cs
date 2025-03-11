@@ -95,16 +95,42 @@ public class Tetromino
             int x = Blocks[i].Item1;
             int y = Blocks[i].Item2;
 
-            if (x < 0 && y < 0 || x >= 0 && y >= 0)
-            {
-                x *= -1;
-            }
-            else
-            {
-                y *= -1;
-            }
+            int newX = -y - 1;
+            int newY = x;
 
-            Blocks[i] = (x, y);
+            /* if (x < 0 && y < 0)
+            {
+                // -2, -2 -> 1, -2
+                // -1, -2 -> 1, -1
+                // -2, -1 -> 0, -2
+                // -1, -1 -> 0, -1
+
+                newX = -y - 1;
+                newY = x;
+            }
+            if (x >= 0 && y < 0)
+            {
+                // 0, -2 -> 1, 0
+                // 1, -2 -> 1, 1
+                // 0, -1 -> 0, 0
+                // 1, -1 -> 0, 1
+
+                newX = -y - 1;
+                newY = x;
+            }
+            if (x >= 0 && y >= 0)
+            {
+                // 0,  0 -> -1, 0
+                // 1,  0 -> -1, 1
+                // 0,  1 -> -2, 0
+                // 1,  1 -> -2, 1
+
+                newX = -y - 1;
+                newY = x;
+            } */
+
+
+            Blocks[i] = (newX, newY);
         }
     }
 }

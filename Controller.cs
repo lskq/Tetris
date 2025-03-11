@@ -17,7 +17,12 @@ public class Controller
 
     public void Start()
     {
-        do { Step(); } while (!Keyboard.IsKeyDown(Key.Escape));
+        do
+        {
+            Step();
+            Thread.Sleep(20);
+        } while (!Keyboard.IsKeyDown(Key.Escape));
+
         throw new Exception(); //For testing
     }
 
