@@ -50,13 +50,13 @@ public class ConsoleView
     {
         return color switch
         {
-            Color.Cyan => "\x1b[r;0;255;255",
-            Color.Blue => "\x1b[r;0;0;255",
-            Color.Orange => "\x1b[r;255;165;0",
-            Color.Yellow => "\x1b[r;255;255;0",
-            Color.Green => "\x1b[r;0;255;0",
-            Color.Purple => "\x1b[r;255;0;255",
-            Color.Red => "\x1b[r;255;0;0",
+            Color.Cyan => "\x1b[0;255;255m",
+            Color.Blue => "\x1b[0;0;255m",
+            Color.Orange => "\x1b[255;165;0m",
+            Color.Yellow => "\x1b[255;255;0m",
+            Color.Green => "\x1b[0;255;0m",
+            Color.Purple => "\x1b[255;0;255m",
+            Color.Red => "\x1b[255;0;0m",
             _ => "\x1b[39;49m",
         };
     }

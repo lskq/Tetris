@@ -34,11 +34,11 @@ public class Controller
         int xVector = 0;
         int yVector = 0;
 
-        xVector += (Keyboard.IsKeyDown(Key.Left)) ? -1 : 0;
-        xVector += (Keyboard.IsKeyDown(Key.Right)) ? 1 : 0;
+        xVector += Keyboard.IsKeyDown(Key.Left) ? -1 : 0;
+        xVector += Keyboard.IsKeyDown(Key.Right) ? 1 : 0;
 
-        yVector += (Keyboard.IsKeyDown(Key.Up)) ? -1 : 0;
-        yVector += (Keyboard.IsKeyDown(Key.Down)) ? 1 : 0;
+        yVector += Keyboard.IsKeyDown(Key.Up) ? -1 : 0;
+        yVector += Keyboard.IsKeyDown(Key.Down) ? 1 : 0;
 
         return (xVector, yVector);
     }
