@@ -21,7 +21,7 @@ public class Controller
         {
             Step();
             Thread.Sleep(20);
-        } while (!Keyboard.IsKeyDown(Key.Escape));
+        } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
 
         throw new Exception(); //For testing
     }
