@@ -51,6 +51,13 @@ public class ConsoleView
             DrawScore();
     }
 
+    public void DrawGameOver()
+    {
+        string message = "Game Over!";
+        Console.SetCursorPosition(Game.Width / 2 - message.Length / 2, Game.Height / 2);
+        Console.Write(DefaultCode + message);
+    }
+
     public void DrawScore()
     {
         Console.SetCursorPosition(Game.Width + 2, 0);

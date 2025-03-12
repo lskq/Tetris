@@ -13,20 +13,26 @@ public class Game
     public Random Random { get; }
 
     public int Score { get; set; }
+    public bool GameOver { get; set; }
     public Mino[][] Grid { get; set; }
-    public Tetromino Tetromino { get; set; }
+    public Tetromino CurrentTetromino { get; set; }
+    public Tetromino NextTetromino { get; set; }
 
     public Game()
     {
         Random = new();
 
         Score = 0;
+        GameOver = false;
+
         Grid = new Mino[Height][];
         for (int i = 0; i < Height; i++)
         {
             Grid[i] = new Mino[Width];
         }
-        Tetromino = GetRandomTetromino();
+
+        CurrentTetromino = GetRandomTetromino();
+        NextTetromino = GetRandomTetromino();
 
         UpdateGrid(true);
     }
@@ -39,35 +45,48 @@ public class Game
         {
             bool right = rotation > 0;
 
-            Tetromino.Rotate(right);
+            CurrentTetromino.Rotate(right);
             if (IsColliding())
             {
-                Tetromino.Rotate(!right);
+                CurrentTetromino.Rotate(!right);
             }
         }
 
         if (xInput != 0)
         {
-            Tetromino.XAbsolute += xInput;
+            CurrentTetromino.XAbsolute += xInput;
             if (IsColliding())
-                Tetromino.XAbsolute -= xInput;
+                CurrentTetromino.XAbsolute -= xInput;
         }
 
         int yMovement = yInput + Gravity;
         if (yMovement != 0)
         {
-            Tetromino.YAbsolute += yMovement;
+            CurrentTetromino.YAbsolute += yMovement;
             if (IsColliding())
             {
-                Tetromino.YAbsolute -= yMovement;
+                CurrentTetromino.YAbsolute -= yMovement;
                 UpdateGrid(true);
-                Tetromino = GetRandomTetromino();
+                NewTetromino();
             }
         }
 
         CheckScore();
 
         UpdateGrid(true);
+    }
+
+    public void NewTetromino()
+    {
+        CurrentTetromino = NextTetromino;
+
+        if (IsColliding())
+        {
+            GameOver = true;
+            return;
+        }
+
+        NextTetromino = GetRandomTetromino();
     }
 
     public void CheckScore()
@@ -79,7 +98,7 @@ public class Game
             for (int x = 0; x < Width; x++)
             {
                 Mino mino = Grid[y][x];
-                if (mino == null || Tetromino.Minoes.Contains(mino))
+                if (mino == null || CurrentTetromino.Minoes.Contains(mino))
                 {
                     scored = false;
                     break;
@@ -101,18 +120,16 @@ public class Game
 
     public bool IsColliding()
     {
-        foreach (Mino mino in Tetromino.Minoes)
+        foreach (Mino mino in CurrentTetromino.Minoes)
         {
             // Wall collision
-            int x = Tetromino.XAbsolute + mino.XRelative;
-            if (x < 0)
-                return true;
-            else if (x >= Width)
+            int x = CurrentTetromino.XAbsolute + mino.XRelative;
+            if (x < 0 || x >= Width)
                 return true;
 
-            // Floor collision
-            int y = Tetromino.YAbsolute + mino.YRelative;
-            if (y >= Height)
+            // Floor/Ceiling collision
+            int y = CurrentTetromino.YAbsolute + mino.YRelative;
+            if (y < 0 || y >= Height)
                 return true;
 
             // Mino collision
@@ -125,10 +142,10 @@ public class Game
 
     public void UpdateGrid(bool draw)
     {
-        foreach (Mino mino in Tetromino.Minoes)
+        foreach (Mino mino in CurrentTetromino.Minoes)
         {
-            int x = Tetromino.XAbsolute + mino.XRelative;
-            int y = Tetromino.YAbsolute + mino.YRelative;
+            int x = CurrentTetromino.XAbsolute + mino.XRelative;
+            int y = CurrentTetromino.YAbsolute + mino.YRelative;
 
             if (draw)
             {

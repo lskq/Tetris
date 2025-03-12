@@ -21,7 +21,11 @@ public class Controller
         {
             Step();
             Thread.Sleep(20);
-        } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+        } while (Console.ReadKey(true).Key != ConsoleKey.Escape && !Game.GameOver);
+
+        View.DrawGameOver();
+
+        do { } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
 
         throw new Exception(); //For testing
     }
