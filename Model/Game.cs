@@ -27,21 +27,8 @@ public class Game
 
     public void Step(int xInput, int yInput, int rotation)
     {
-
         UpdateGrid(false);
 
-        if (xInput != 0)
-        {
-            Tetromino.XAbsolute += xInput;
-            if (IsColliding())
-                Tetromino.XAbsolute -= xInput;
-        }
-        if (yInput != 0)
-        {
-            Tetromino.YAbsolute += yInput;
-            if (IsColliding())
-                Tetromino.YAbsolute -= yInput;
-        }
         if (rotation != 0)
         {
             bool right = rotation > 0;
@@ -53,6 +40,25 @@ public class Game
             }
         }
 
+        if (xInput != 0)
+        {
+            Tetromino.XAbsolute += xInput;
+            if (IsColliding())
+                Tetromino.XAbsolute -= xInput;
+        }
+
+        int yMovement = yInput + Gravity;
+        if (yMovement != 0)
+        {
+            Tetromino.YAbsolute += yMovement;
+            if (IsColliding())
+            {
+                Tetromino.YAbsolute -= yMovement;
+                UpdateGrid(true);
+                Tetromino = GetRandomTetromino();
+            }
+        }
+
         UpdateGrid(true);
     }
 
@@ -60,14 +66,20 @@ public class Game
     {
         foreach (Mino mino in Tetromino.Minoes)
         {
+            // Wall collision
             int x = Tetromino.XAbsolute + mino.XRelative;
             if (x < 0)
                 return true;
             else if (x >= Width)
                 return true;
 
+            // Floor collision
             int y = Tetromino.YAbsolute + mino.YRelative;
             if (y >= Height)
+                return true;
+
+            // Mino collision
+            if (Grid[x, y] != null)
                 return true;
         }
 
