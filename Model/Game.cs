@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Tetris.Model;
 
 public class Game
@@ -63,6 +65,8 @@ public class Game
             }
         }
 
+        CheckScore();
+
         UpdateGrid(true);
     }
 
@@ -74,7 +78,8 @@ public class Game
 
             for (int x = 0; x < Width; x++)
             {
-                if (Grid[y][x] == null)
+                Mino mino = Grid[y][x];
+                if (mino == null || Tetromino.Minoes.Contains(mino))
                 {
                     scored = false;
                     break;
@@ -83,6 +88,12 @@ public class Game
 
             if (scored)
             {
+                for (int i = y; i > 0; i--)
+                {
+                    Grid[i] = Grid[i - 1];
+                }
+                Grid[0] = new Mino[10];
+
                 Score++;
             }
         }

@@ -1,13 +1,13 @@
-using System.Windows;
 using Tetris.Model;
 
 namespace Tetris.View;
 
 public class ConsoleView
 {
-    public const string SpaceSymbol = "\x1b[0m ";
+    public const char SpaceSymbol = ' ';
     public const char MinoSymbol = ' ';
     public const char BorderSymbol = '#';
+    public const string DefaultCode = "\x1b[0m";
 
     public Game Game { get; }
     public Mino[][] Grid { get; }
@@ -37,7 +37,7 @@ public class ConsoleView
 
                 if (Grid[y][x] == null)
                 {
-                    Console.Write(SpaceSymbol);
+                    Console.Write(DefaultCode + SpaceSymbol);
                 }
                 else
                 {
@@ -54,7 +54,7 @@ public class ConsoleView
     public void DrawScore()
     {
         Console.SetCursorPosition(Game.Width + 2, 0);
-        Console.Write(Game.Score);
+        Console.Write(DefaultCode + Game.Score);
     }
 
     public void DrawBorder()
