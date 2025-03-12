@@ -5,24 +5,25 @@ public class Tetromino(int x, int y, Shape shape)
     public int XAbsolute { get; set; } = x;
     public int YAbsolute { get; set; } = y;
 
-    public Mino[] Minoes { get; set; } = GetShape(shape);
+    public Mino[] Minoes { get; set; } = SetMinoes(shape);
 
     public void Rotate()
     {
         for (int i = 0; i < Minoes.Length; i++)
         {
-            int x = Minoes[i].XRelative;
-            int y = Minoes[i].YRelative;
+            Mino mino = Minoes[i];
 
+            int x = mino.XRelative;
+            int y = mino.YRelative;
             int newX = -y - 1;
             int newY = x;
 
-            Minoes[i].XRelative = newX;
-            Minoes[i].YRelative = newY;
+            mino.XRelative = newX;
+            mino.YRelative = newY;
         }
     }
 
-    public static Mino[] GetShape(Shape shape)
+    public static Mino[] SetMinoes(Shape shape)
     {
         Color color = Color.Cyan;
         (int, int)[] coords = new (int, int)[4];

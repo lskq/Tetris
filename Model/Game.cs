@@ -6,7 +6,7 @@ public class Game
     public const int Height = 10;
     public const int XInit = Width / 2;
     public const int YInit = Height * 1 / 4;
-    public const int Gravity = 1;
+    public const int Gravity = 0;
 
     public Random Random { get; }
 
@@ -54,12 +54,15 @@ public class Game
             int newX = Tetromino.XAbsolute + mino.XRelative + xInput;
             if (newX < 0)
                 return true;
-            if (newX >= Width)
+            else if (newX >= Width)
                 return true;
 
-            int newY = Tetromino.YAbsolute + mino.YRelative + yInput;
-            if (newY >= Height)
-                return true;
+            if (yInput > 0)
+            {
+                int newY = Tetromino.YAbsolute + mino.YRelative + Gravity + yInput;
+                if (newY >= Height)
+                    return true;
+            }
         }
         return false;
     }
