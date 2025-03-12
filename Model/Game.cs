@@ -11,7 +11,7 @@ public class Game
     public Random Random { get; }
 
     public int Score { get; set; }
-    public Mino[,] Grid { get; set; }
+    public Mino[][] Grid { get; set; }
     public Tetromino Tetromino { get; set; }
 
     public Game()
@@ -19,7 +19,11 @@ public class Game
         Random = new();
 
         Score = 0;
-        Grid = new Mino[Width, Height];
+        Grid = new Mino[Height][];
+        for (int i = 0; i < Height; i++)
+        {
+            Grid[i] = new Mino[Width];
+        }
         Tetromino = GetRandomTetromino();
 
         UpdateGrid(true);
@@ -62,6 +66,28 @@ public class Game
         UpdateGrid(true);
     }
 
+    public void CheckScore()
+    {
+        for (int y = 0; y < Height; y++)
+        {
+            bool scored = true;
+
+            for (int x = 0; x < Width; x++)
+            {
+                if (Grid[y][x] == null)
+                {
+                    scored = false;
+                    break;
+                }
+            }
+
+            if (scored)
+            {
+                Score++;
+            }
+        }
+    }
+
     public bool IsColliding()
     {
         foreach (Mino mino in Tetromino.Minoes)
@@ -79,7 +105,7 @@ public class Game
                 return true;
 
             // Mino collision
-            if (Grid[x, y] != null)
+            if (Grid[y][x] != null)
                 return true;
         }
 
@@ -95,12 +121,12 @@ public class Game
 
             if (draw)
             {
-                Grid[x, y] = mino;
+                Grid[y][x] = mino;
             }
             else
             {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                Grid[x, y] = null;
+                Grid[y][x] = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             }
         }

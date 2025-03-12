@@ -10,7 +10,7 @@ public class ConsoleView
     public const char BorderSymbol = '#';
 
     public Game Game { get; }
-    public Mino[,] Grid { get; }
+    public Mino[][] Grid { get; }
 
     public int ScoreTracker { get; set; }
 
@@ -35,13 +35,13 @@ public class ConsoleView
             {
                 Console.SetCursorPosition(x, y);
 
-                if (Grid[x, y] == null)
+                if (Grid[y][x] == null)
                 {
                     Console.Write(SpaceSymbol);
                 }
                 else
                 {
-                    string colorCode = GetColorCode(Grid[x, y].Color);
+                    string colorCode = GetColorCode(Grid[y][x].Color);
                     Console.Write(colorCode + MinoSymbol);
                 }
             }
