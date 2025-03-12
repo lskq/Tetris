@@ -4,11 +4,12 @@ namespace Tetris.View;
 
 public class ConsoleView
 {
-    public const char Space = ' ';
-    public const char Border = '#';
+    public const string SpaceSymbol = "\x1b[0m ";
+    public const char MinoSymbol = ' ';
+    public const char BorderSymbol = '#';
 
-    public Game Game { get; set; }
-    public bool[,] Grid { get; set; }
+    public Game Game { get; }
+    public Mino[,] Grid { get; }
 
     public ConsoleView(Game game)
     {
@@ -23,31 +24,22 @@ public class ConsoleView
 
     public void Step()
     {
-        Tetromino tetromino = Game.Tetromino;
-
-        string emptyString = "\x1b[0m" + Space;
-
         for (int x = 0; x < Game.Width; x++)
         {
             for (int y = 0; y < Game.Height; y++)
             {
-                if (!Grid[x, y])
+                Console.SetCursorPosition(x, y);
+
+                if (Grid[x, y] == null)
                 {
-                    Console.SetCursorPosition(x, y);
-                    Console.Write(emptyString);
+                    Console.Write(SpaceSymbol);
+                }
+                else
+                {
+                    string colorCode = GetColorCode(Grid[x, y].Color);
+                    Console.Write(colorCode + MinoSymbol);
                 }
             }
-        }
-
-        string blockString = GetColorCode(tetromino.Color) + Space;
-
-        foreach ((int, int) block in tetromino.Blocks)
-        {
-            int x = tetromino.X + block.Item1;
-            int y = tetromino.Y + block.Item2;
-
-            Console.SetCursorPosition(x, y);
-            Console.Write(blockString);
         }
     }
 
@@ -59,14 +51,14 @@ public class ConsoleView
         for (int y = 0; y < height; y++)
         {
             Console.SetCursorPosition(width, y);
-            Console.Write(Border);
+            Console.Write(BorderSymbol);
         }
 
         Console.SetCursorPosition(0, height);
 
         for (int x = 0; x < width; x++)
         {
-            Console.Write(Border);
+            Console.Write(BorderSymbol);
         }
     }
 

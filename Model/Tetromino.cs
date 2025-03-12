@@ -1,104 +1,112 @@
 namespace Tetris.Model;
 
-public class Tetromino
+public class Tetromino(int x, int y, Shape shape)
 {
-    public int X { get; set; }
-    public int Y { get; set; }
+    public int XAbsolute { get; set; } = x;
+    public int YAbsolute { get; set; } = y;
 
-    public Color Color { get; set; }
-    public (int, int)[] Blocks { get; set; }
+    public Mino[] Minoes { get; set; } = GetShape(shape);
 
-    public Tetromino(int x, int y, Shape shape)
+    public void Rotate()
     {
-        X = x;
-        Y = y;
+        for (int i = 0; i < Minoes.Length; i++)
+        {
+            int x = Minoes[i].XRelative;
+            int y = Minoes[i].YRelative;
 
-        Blocks = new (int, int)[4];
+            int newX = -y - 1;
+            int newY = x;
+
+            Minoes[i].XRelative = newX;
+            Minoes[i].YRelative = newY;
+        }
+    }
+
+    public static Mino[] GetShape(Shape shape)
+    {
+        Color color = Color.Cyan;
+        (int, int)[] coords = new (int, int)[4];
 
         // Shapes are designed with the console in mind, so top left is (0,0)
         switch (shape)
         {
             case Shape.I:
                 // ####
-                Color = Color.Cyan;
-                Blocks[0] = (-2, -1);
-                Blocks[1] = (-1, -1);
-                Blocks[2] = (0, -1);
-                Blocks[3] = (1, -1);
+                color = Color.Cyan;
+                coords[0] = (-2, -1);
+                coords[1] = (-1, -1);
+                coords[2] = (0, -1);
+                coords[3] = (1, -1);
                 break;
 
             case Shape.J:
                 // #
                 // ###
-                Color = Color.Blue;
-                Blocks[0] = (-2, -2);
-                Blocks[1] = (-2, -1);
-                Blocks[2] = (-1, -1);
-                Blocks[3] = (0, -1);
+                color = Color.Blue;
+                coords[0] = (-2, -2);
+                coords[1] = (-2, -1);
+                coords[2] = (-1, -1);
+                coords[3] = (0, -1);
                 break;
 
             case Shape.L:
                 //   #
                 // ###
-                Color = Color.Orange;
-                Blocks[0] = (-2, -1);
-                Blocks[1] = (-1, -1);
-                Blocks[2] = (0, -1);
-                Blocks[3] = (0, -2);
+                color = Color.Orange;
+                coords[0] = (-2, -1);
+                coords[1] = (-1, -1);
+                coords[2] = (0, -1);
+                coords[3] = (0, -2);
                 break;
 
             case Shape.O:
                 // ##
                 // ##
-                Color = Color.Yellow;
-                Blocks[0] = (-1, -1);
-                Blocks[1] = (0, -1);
-                Blocks[2] = (-1, 0);
-                Blocks[3] = (0, 0);
+                color = Color.Yellow;
+                coords[0] = (-1, -1);
+                coords[1] = (0, -1);
+                coords[2] = (-1, 0);
+                coords[3] = (0, 0);
                 break;
 
             case Shape.S:
                 //  ##
                 // ##
-                Color = Color.Green;
-                Blocks[0] = (-2, -1);
-                Blocks[1] = (-1, -1);
-                Blocks[2] = (-1, -2);
-                Blocks[3] = (0, -2);
+                color = Color.Green;
+                coords[0] = (-2, -1);
+                coords[1] = (-1, -1);
+                coords[2] = (-1, -2);
+                coords[3] = (0, -2);
                 break;
 
             case Shape.T:
                 // ###
                 //  #
-                Color = Color.Purple;
-                Blocks[0] = (-1, -2);
-                Blocks[1] = (-2, -1);
-                Blocks[2] = (-1, -1);
-                Blocks[3] = (0, -1);
+                color = Color.Purple;
+                coords[0] = (-1, -2);
+                coords[1] = (-2, -1);
+                coords[2] = (-1, -1);
+                coords[3] = (0, -1);
                 break;
 
             case Shape.Z:
                 // ##
                 //  ##
-                Color = Color.Red;
-                Blocks[0] = (-2, -2);
-                Blocks[1] = (-1, -2);
-                Blocks[2] = (-1, -1);
-                Blocks[3] = (0, -1);
+                color = Color.Red;
+                coords[0] = (-2, -2);
+                coords[1] = (-1, -2);
+                coords[2] = (-1, -1);
+                coords[3] = (0, -1);
                 break;
         }
-    }
-    public void Rotate()
-    {
-        for (int i = 0; i < Blocks.Length; i++)
+
+        Mino[] minoes = new Mino[4];
+
+        for (int i = 0; i < 4; i++)
         {
-            int x = Blocks[i].Item1;
-            int y = Blocks[i].Item2;
-
-            int newX = -y - 1;
-            int newY = x;
-
-            Blocks[i] = (newX, newY);
+            minoes[i] = new Mino(coords[i].Item1, coords[i].Item2, color);
         }
+
+        return minoes;
     }
 }

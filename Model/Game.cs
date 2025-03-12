@@ -5,19 +5,19 @@ public class Game
     public const int Width = 10;
     public const int Height = 10;
     public const int XInit = Width / 2;
-    public const int YInit = Height * 3 / 4;
+    public const int YInit = Height * 1 / 4;
     public const int Gravity = 1;
 
     public Random Random { get; }
 
-    public bool[,] Grid { get; set; }
+    public Mino[,] Grid { get; set; }
     public Tetromino Tetromino { get; set; }
 
     public Game()
     {
         Random = new();
 
-        Grid = new bool[Width, Height];
+        Grid = new Mino[Width, Height];
         Tetromino = GetRandomTetromino();
 
         UpdateGrid(true);
@@ -25,28 +25,43 @@ public class Game
 
     public void Step(int xInput, int yInput)
     {
-        UpdateGrid(false);
-
-        if (yInput < 0)
+        if (xInput != 0 || yInput != 0)
         {
-            Tetromino.Rotate();
+            UpdateGrid(false);
+
+            if (xInput != 0)
+            {
+                Tetromino.XAbsolute += xInput;
+            }
+            if (yInput > 0)
+            {
+                Tetromino.YAbsolute += yInput;
+            }
+            else if (yInput < 0)
+            {
+                Tetromino.Rotate();
+            }
+
             UpdateGrid(true);
-            return;
         }
 
-        Tetromino.X += xInput;
-        // Tetromino.Y += (yInput > 0) ? Gravity + yInput : Gravity;
-        UpdateGrid(true);
     }
 
-    public void UpdateGrid(bool state)
+    public void UpdateGrid(bool draw)
     {
-        foreach ((int, int) block in Tetromino.Blocks)
+        foreach (Mino mino in Tetromino.Minoes)
         {
-            int x = Tetromino.X + block.Item1;
-            int y = Tetromino.Y + block.Item2;
+            int x = Tetromino.XAbsolute + mino.XRelative;
+            int y = Tetromino.YAbsolute + mino.YRelative;
 
-            Grid[x, y] = state;
+            if (draw)
+            {
+                Grid[x, y] = mino;
+            }
+            else
+            {
+                Grid[x, y] = null;
+            }
         }
     }
 
