@@ -1,3 +1,4 @@
+using System.Windows;
 using Tetris.Model;
 
 namespace Tetris.View;
@@ -11,15 +12,19 @@ public class ConsoleView
     public Game Game { get; }
     public Mino[,] Grid { get; }
 
+    public int ScoreTracker { get; set; }
+
     public ConsoleView(Game game)
     {
         Game = game;
         Grid = game.Grid;
+        ScoreTracker = game.Score;
 
         Console.CursorVisible = false;
         Console.Clear();
 
         DrawBorder();
+        DrawScore();
     }
 
     public void Step()
@@ -41,6 +46,15 @@ public class ConsoleView
                 }
             }
         }
+
+        if (ScoreTracker != Game.Score)
+            DrawScore();
+    }
+
+    public void DrawScore()
+    {
+        Console.SetCursorPosition(Game.Width + 2, 0);
+        Console.Write(Game.Score);
     }
 
     public void DrawBorder()

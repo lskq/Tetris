@@ -5,11 +5,12 @@ public class Game
     public const int Width = 10;
     public const int Height = 10;
     public const int XInit = Width / 2;
-    public const int YInit = Height * 2;
+    public const int YInit = 2;
     public const int Gravity = 0;
 
     public Random Random { get; }
 
+    public int Score { get; set; }
     public Mino[,] Grid { get; set; }
     public Tetromino Tetromino { get; set; }
 
@@ -17,6 +18,7 @@ public class Game
     {
         Random = new();
 
+        Score = 0;
         Grid = new Mino[Width, Height];
         Tetromino = GetRandomTetromino();
 
