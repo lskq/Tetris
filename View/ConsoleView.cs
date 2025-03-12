@@ -5,6 +5,7 @@ namespace Tetris.View;
 public class ConsoleView
 {
     public const char Space = ' ';
+    public const char Border = '#';
 
     public Game Game { get; set; }
     public bool[,] Grid { get; set; }
@@ -16,6 +17,8 @@ public class ConsoleView
 
         Console.CursorVisible = false;
         Console.Clear();
+
+        DrawBorder();
     }
 
     public void Step()
@@ -45,6 +48,25 @@ public class ConsoleView
 
             Console.SetCursorPosition(x, y);
             Console.Write(blockString);
+        }
+    }
+
+    public void DrawBorder()
+    {
+        int width = Game.Width;
+        int height = Game.Height;
+
+        for (int y = 0; y < height; y++)
+        {
+            Console.SetCursorPosition(width, y);
+            Console.Write(Border);
+        }
+
+        Console.SetCursorPosition(0, height);
+
+        for (int x = 0; x < width; x++)
+        {
+            Console.Write(Border);
         }
     }
 
