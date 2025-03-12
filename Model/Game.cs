@@ -25,7 +25,7 @@ public class Game
 
     public void Step(int xInput, int yInput)
     {
-        if (xInput != 0 || yInput != 0)
+        if ((xInput != 0 || yInput != 0) && !WouldCollide(xInput, yInput))
         {
             UpdateGrid(false);
 
@@ -45,6 +45,23 @@ public class Game
             UpdateGrid(true);
         }
 
+    }
+
+    public bool WouldCollide(int xInput, int yInput)
+    {
+        foreach (Mino mino in Tetromino.Minoes)
+        {
+            int newX = Tetromino.XAbsolute + mino.XRelative + xInput;
+            if (newX < 0)
+                return true;
+            if (newX >= Width)
+                return true;
+
+            int newY = Tetromino.YAbsolute + mino.YRelative + yInput;
+            if (newY >= Height)
+                return true;
+        }
+        return false;
     }
 
     public void UpdateGrid(bool draw)
