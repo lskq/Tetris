@@ -28,16 +28,17 @@ public class Controller
 
     public void Step()
     {
-        (int, int) input = GetPlayerInput();
+        (int, int, int) input = GetPlayerInput();
 
-        Game.Step(input.Item1, input.Item2);
+        Game.Step(input.Item1, input.Item2, input.Item3);
         View.Step();
     }
 
-    public (int, int) GetPlayerInput()
+    public (int, int, int) GetPlayerInput()
     {
         int xVector = 0;
         int yVector = 0;
+        int rotation = 0;
 
         xVector += Keyboard.IsKeyDown(Key.Left) ? -1 : 0;
         xVector += Keyboard.IsKeyDown(Key.Right) ? 1 : 0;
@@ -45,6 +46,9 @@ public class Controller
         yVector += Keyboard.IsKeyDown(Key.Up) ? -1 : 0;
         yVector += Keyboard.IsKeyDown(Key.Down) ? 1 : 0;
 
-        return (xVector, yVector);
+        rotation += Keyboard.IsKeyDown(Key.OemComma) ? -1 : 0;
+        rotation += Keyboard.IsKeyDown(Key.OemPeriod) ? 1 : 0;
+
+        return (xVector, yVector, rotation);
     }
 }

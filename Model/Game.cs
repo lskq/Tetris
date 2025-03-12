@@ -23,47 +23,52 @@ public class Game
         UpdateGrid(true);
     }
 
-    public void Step(int xInput, int yInput)
+    public void Step(int xInput, int yInput, int rotation)
     {
-        if ((xInput != 0 || yInput != 0) && !WouldCollide(xInput, yInput))
+
+        UpdateGrid(false);
+
+        if (xInput != 0)
         {
-            UpdateGrid(false);
+            Tetromino.XAbsolute += xInput;
+            if (IsColliding())
+                Tetromino.XAbsolute -= xInput;
+        }
+        if (yInput != 0)
+        {
+            Tetromino.YAbsolute += yInput;
+            if (IsColliding())
+                Tetromino.YAbsolute -= yInput;
+        }
+        if (rotation != 0)
+        {
+            bool right = rotation > 0;
 
-            if (xInput != 0)
+            Tetromino.Rotate(right);
+            if (IsColliding())
             {
-                Tetromino.XAbsolute += xInput;
+                Tetromino.Rotate(!right);
             }
-            if (yInput > 0)
-            {
-                Tetromino.YAbsolute += yInput;
-            }
-            else if (yInput < 0)
-            {
-                Tetromino.Rotate();
-            }
-
-            UpdateGrid(true);
         }
 
+        UpdateGrid(true);
     }
 
-    public bool WouldCollide(int xInput, int yInput)
+    public bool IsColliding()
     {
         foreach (Mino mino in Tetromino.Minoes)
         {
-            int newX = Tetromino.XAbsolute + mino.XRelative + xInput;
-            if (newX < 0)
+            int x = Tetromino.XAbsolute + mino.XRelative;
+            if (x < 0)
                 return true;
-            else if (newX >= Width)
+            else if (x >= Width)
                 return true;
 
-            if (yInput > 0)
-            {
-                int newY = Tetromino.YAbsolute + mino.YRelative + Gravity + yInput;
-                if (newY >= Height)
-                    return true;
-            }
+            int y = Tetromino.YAbsolute + mino.YRelative;
+            if (y >= Height)
+                return true;
         }
+
         return false;
     }
 

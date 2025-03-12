@@ -7,7 +7,7 @@ public class Tetromino(int x, int y, Shape shape)
 
     public Mino[] Minoes { get; set; } = SetMinoes(shape);
 
-    public void Rotate()
+    public void Rotate(bool right = true)
     {
         for (int i = 0; i < Minoes.Length; i++)
         {
@@ -15,8 +15,20 @@ public class Tetromino(int x, int y, Shape shape)
 
             int x = mino.XRelative;
             int y = mino.YRelative;
-            int newX = -y - 1;
-            int newY = x;
+
+            int newX;
+            int newY;
+
+            if (right)
+            {
+                newX = -y - 1;
+                newY = x;
+            }
+            else
+            {
+                newX = y;
+                newY = -x - 1;
+            }
 
             mino.XRelative = newX;
             mino.YRelative = newY;
