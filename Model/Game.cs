@@ -5,7 +5,7 @@ public class Game
     public const int Width = 10;
     public const int Height = 10;
     public const int XInit = Width / 2;
-    public const int YInit = Height * 1 / 4;
+    public const int YInit = Height * 2;
     public const int Gravity = 0;
 
     public Random Random { get; }
@@ -85,7 +85,9 @@ public class Game
             }
             else
             {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 Grid[x, y] = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             }
         }
     }
