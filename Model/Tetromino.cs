@@ -2,8 +2,8 @@ namespace Tetris.Model;
 
 public class Tetromino(int x, int y, Shape shape)
 {
-    public int XAbsolute { get; set; } = x;
-    public int YAbsolute { get; set; } = y;
+    public double XAbsolute { get; set; } = x;
+    public double YAbsolute { get; set; } = y;
 
     public Mino[] Minoes { get; set; } = SetMinoes(shape);
 

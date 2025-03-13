@@ -8,7 +8,7 @@ public class Game
     public const int Height = 10;
     public const int XInit = Width / 2;
     public const int YInit = 2;
-    public const int Gravity = 0;
+    public const double GravityConstant = (double)Height / 50;
 
     public Random Random { get; }
 
@@ -59,7 +59,7 @@ public class Game
                 CurrentTetromino.XAbsolute -= xInput;
         }
 
-        int yMovement = yInput + Gravity;
+        double yMovement = yInput + GravityConstant;
         if (yMovement != 0)
         {
             CurrentTetromino.YAbsolute += yMovement;
@@ -123,12 +123,12 @@ public class Game
         foreach (Mino mino in CurrentTetromino.Minoes)
         {
             // Wall collision
-            int x = CurrentTetromino.XAbsolute + mino.XRelative;
+            int x = (int)CurrentTetromino.XAbsolute + mino.XRelative;
             if (x < 0 || x >= Width)
                 return true;
 
             // Floor/Ceiling collision
-            int y = CurrentTetromino.YAbsolute + mino.YRelative;
+            int y = (int)CurrentTetromino.YAbsolute + mino.YRelative;
             if (y < 0 || y >= Height)
                 return true;
 
@@ -144,8 +144,8 @@ public class Game
     {
         foreach (Mino mino in CurrentTetromino.Minoes)
         {
-            int x = CurrentTetromino.XAbsolute + mino.XRelative;
-            int y = CurrentTetromino.YAbsolute + mino.YRelative;
+            int x = (int)CurrentTetromino.XAbsolute + mino.XRelative;
+            int y = (int)CurrentTetromino.YAbsolute + mino.YRelative;
 
             if (draw)
             {

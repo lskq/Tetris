@@ -47,7 +47,8 @@ public class Controller
         xVector += Keyboard.IsKeyDown(Key.Left) ? -1 : 0;
         xVector += Keyboard.IsKeyDown(Key.Right) ? 1 : 0;
 
-        yVector += Keyboard.IsKeyDown(Key.Up) ? -1 : 0;
+        if (Game.GravityConstant == 0)
+            yVector += Keyboard.IsKeyDown(Key.Up) ? -1 : 0;
         yVector += Keyboard.IsKeyDown(Key.Down) ? 1 : 0;
 
         rotation += Keyboard.IsKeyDown(Key.OemComma) ? -1 : 0;
