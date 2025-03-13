@@ -20,12 +20,12 @@ public class Controller
         do
         {
             Step();
-            Thread.Sleep(20);
-        } while (Console.ReadKey(true).Key != ConsoleKey.Escape && !Game.GameOver);
+            Thread.Sleep(50);
+        } while (!Keyboard.IsKeyDown(Key.Escape) && !Game.GameOver);
 
         View.DrawGameOver();
 
-        do { } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+        do { } while (!Keyboard.IsKeyDown(Key.Escape));
 
         throw new Exception(); //For testing
     }

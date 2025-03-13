@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace Tetris.Model;
 
 public class Game
