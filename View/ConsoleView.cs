@@ -33,22 +33,27 @@ public class ConsoleView
         {
             for (int y = 0; y < Game.Height; y++)
             {
-                Console.SetCursorPosition(x, y);
-
-                if (Grid[y][x] == null)
-                {
-                    Console.Write(DefaultCode + SpaceSymbol);
-                }
-                else
-                {
-                    string colorCode = GetColorCode(Grid[y][x].Color);
-                    Console.Write(colorCode + MinoSymbol);
-                }
+                DrawMino(x, y);
             }
         }
 
         if (ScoreTracker != Game.Score)
             DrawScore();
+    }
+
+    public void DrawMino(int x, int y)
+    {
+        Console.SetCursorPosition(x, y);
+
+        if (Grid[y][x] == null)
+        {
+            Console.Write(DefaultCode + SpaceSymbol);
+        }
+        else
+        {
+            string colorCode = GetColorCode(Grid[y][x].Color);
+            Console.Write(colorCode + MinoSymbol);
+        }
     }
 
     public void DrawGameOver()

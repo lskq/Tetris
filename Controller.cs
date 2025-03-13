@@ -17,10 +17,12 @@ public class Controller
 
     public void Start()
     {
+        int tickRate = Game.TickRate;
+
         do
         {
             Step();
-            Thread.Sleep(50);
+            Thread.Sleep(tickRate);
         } while (!Keyboard.IsKeyDown(Key.Escape) && !Game.GameOver);
 
         View.DrawGameOver();
@@ -48,7 +50,7 @@ public class Controller
         xVector += Keyboard.IsKeyDown(Key.Right) ? 1 : 0;
 
         if (Game.GravityConstant == 0)
-            yVector += Keyboard.IsKeyDown(Key.Up) ? -1 : 0;
+            yVector += Keyboard.IsKeyDown(Key.Up) ? -1 : 0; // For testing
         yVector += Keyboard.IsKeyDown(Key.Down) ? 1 : 0;
 
         rotation += Keyboard.IsKeyDown(Key.OemComma) ? -1 : 0;

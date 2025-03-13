@@ -8,6 +8,8 @@ public class Game
     public const int YInit = 2;
     public const double GravityConstant = (double)Height / 50;
 
+    public const int TickRate = 50;
+
     public Random Random { get; }
 
     public int Score { get; set; }
@@ -63,10 +65,15 @@ public class Game
             CurrentTetromino.YAbsolute += yMovement;
             if (IsColliding())
             {
-                CurrentTetromino.YAbsolute -= yMovement;
+                do
+                {
+                    CurrentTetromino.YAbsolute -= 1;
+                } while (IsColliding());
+
                 UpdateGrid(true);
                 NewTetromino();
             }
+
         }
 
         CheckScore();
