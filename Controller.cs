@@ -22,7 +22,7 @@ public class Controller
         do
         {
             Step();
-            //Thread.Sleep(tickRate);
+            Thread.Sleep(tickRate);
         } while (!Keyboard.IsKeyDown(Key.Escape));
 
         throw new Exception(); //For testing

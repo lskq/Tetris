@@ -76,7 +76,6 @@ public class Game
                 UpdateGrid(true);
                 NewTetromino();
             }
-
         }
 
         CheckScore();
