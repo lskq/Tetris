@@ -9,10 +9,18 @@ public class Controller
     public Game Game { get; set; }
     public ConsoleView View { get; set; }
 
-    public Controller()
+    public Controller(string[] args)
     {
+        bool scalable = false;
+        bool offsetable = false;
+
+        if (args.Where(x => x.Equals("-s")).Any())
+            scalable = true;
+        if (args.Where(x => x.Equals("-o")).Any())
+            offsetable = true;
+
         Game = new Game();
-        View = new ConsoleView(Game);
+        View = new ConsoleView(Game, scalable, offsetable);
     }
 
     public void Start()
@@ -22,7 +30,7 @@ public class Controller
         do
         {
             Step();
-            Thread.Sleep(tickRate);
+            //Thread.Sleep(tickRate);
         } while (!Keyboard.IsKeyDown(Key.Escape));
 
         throw new Exception(); //For testing

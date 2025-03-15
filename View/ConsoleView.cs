@@ -11,19 +11,25 @@ public class ConsoleView
     public Mino[][] Grid { get; }
     public int ScoreTracker { get; set; }
 
+    public bool Scalable { get; }
+    public bool Offsetable { get; }
+
     // The following are set using UpdateScreenMath() in DrawScreen(). Expressions were too performance-intensive
     public int ScreenWidth { get; set; }
     public int ScreenHeight { get; set; }
-    public int YScale { get; set; }
-    public int XScale { get; set; }
+    public int YScale { get; set; } = 1;
+    public int XScale { get; set; } = 2;
     public int GridXOffset { get; set; }
     public int GridYOffset { get; set; }
 
-    public ConsoleView(Game game)
+    public ConsoleView(Game game, bool scalable = false, bool offsetable = false)
     {
         Game = game;
         Grid = game.Grid;
         ScoreTracker = game.Score;
+
+        Scalable = scalable;
+        Offsetable = offsetable;
 
         Console.CursorVisible = false;
 
@@ -41,7 +47,7 @@ public class ConsoleView
                 DrawScreen();
             }
             else if (!Game.GameOver)
-            {   
+            {
                 DrawMinoesInGrid();
             }
             else
@@ -66,11 +72,11 @@ public class ConsoleView
             }
         }
     }
-    
+
     public void DrawMino(int x, int y)
     {
         string color;
-        
+
         if (Grid[y][x] == null)
         {
             color = GetColor(ConsoleColor.Grid);
@@ -79,7 +85,7 @@ public class ConsoleView
         {
             color = GetColor(Grid[y][x].MinoColor);
         }
-        
+
         DrawPixel(GridXOffset + x * XScale, GridYOffset + y * YScale, color);
     }
 
@@ -89,7 +95,7 @@ public class ConsoleView
 
         int x = GridXOffset + (Game.Width * XScale) / 2 - message.Length / 2;
         int y = GridYOffset + (Game.Height * YScale) / 2;
-        
+
         Console.SetCursorPosition(x, y);
         Console.Write(message);
     }
@@ -104,11 +110,11 @@ public class ConsoleView
 
             int currentWidth = Console.WindowWidth;
             int currentHeight = Console.WindowHeight;
-            
+
             do { } while (currentWidth == Console.WindowWidth && currentHeight == Console.WindowHeight);
         }
     }
-    
+
     public void DrawScreen()
     {
         UpdateScreenMath();
@@ -120,21 +126,21 @@ public class ConsoleView
             DrawMinoesInGrid();
         }
     }
-    
+
     public void DrawGrid()
     {
         string color = GetColor(ConsoleColor.Grid);
         for (int y = 0; y < Game.Height * YScale; y++)
         {
             Console.SetCursorPosition(GridXOffset, GridYOffset + y);
-            
+
             for (int x = 0; x < Game.Width * XScale; x++)
             {
                 Console.Write(color + " ");
             }
         }
     }
-    
+
     public void DrawBackground()
     {
         string color = GetColor(ConsoleColor.Background);
@@ -147,7 +153,7 @@ public class ConsoleView
             }
         }
     }
-    
+
     public void DrawPixel(int left, int top, string colorCode)
     {
         for (int y = 0; y < YScale; y++)
@@ -164,15 +170,21 @@ public class ConsoleView
     {
         ScreenWidth = Console.WindowWidth;
         ScreenHeight = Console.WindowHeight;
-        
-        YScale = (Console.WindowWidth / (Game.Width * 2) < Console.WindowHeight / Game.Height) ?
-                    Console.WindowWidth / (Game.Width * 2) : Console.WindowHeight / Game.Height;
-        XScale = YScale * 2;
-        
-        GridXOffset = (Console.WindowWidth - Game.Width *  XScale) / 2;
-        GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
+
+        if (Scalable)
+        {
+            YScale = (Console.WindowWidth / (Game.Width * 2) < Console.WindowHeight / Game.Height) ?
+                        Console.WindowWidth / (Game.Width * 2) : Console.WindowHeight / Game.Height;
+            XScale = YScale * 2;
+        }
+
+        if (Offsetable)
+        {
+            GridXOffset = (Console.WindowWidth - Game.Width * XScale) / 2;
+            GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
+        }
     }
-    
+
     public static string GetColor(ConsoleColor consoleColor)
     {
         return consoleColor switch
@@ -183,7 +195,7 @@ public class ConsoleView
             _ => "\x1b[39;49m",
         };
     }
-    
+
     public static string GetColor(MinoColor minoColor)
     {
         return minoColor switch

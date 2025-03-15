@@ -8,7 +8,7 @@ class Program
     {
         try
         {
-            Controller controller = new();
+            Controller controller = new(args);
             controller.Start();
         }
         catch (Exception e)
