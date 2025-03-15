@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Windows.Input;
 using Tetris.Model;
 using Tetris.View;
@@ -8,26 +9,46 @@ public class Controller
 {
     public Game Game { get; set; }
     public ConsoleView View { get; set; }
+    public Stopwatch Deltatime { get; set; }
+    public int TickRate { get; set; } = 50;
 
     public Controller(string[] args)
     {
-        bool scalable = false;
         bool offsetable = false;
+        bool scalable = false;
 
-        if (args.Where(x => x.Equals("-s")).Any())
-            scalable = true;
-        if (args.Where(x => x.Equals("-o")).Any())
-            offsetable = true;
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i].Equals("-o"))
+                offsetable = true;
+            else if (args[i].Equals("-s"))
+                scalable = true;
+            else if (args[i].Equals("-t") && i + 1 < args.Length)
+            {
+                if (int.TryParse(args[i + 1], out int ticks))
+                {
+                    TickRate = ticks;
+                    i += 1;
+                }
+            }
+        }
 
         Game = new Game();
-        View = new ConsoleView(Game, scalable, offsetable);
+        View = new ConsoleView(Game, offsetable, scalable);
+        Deltatime = new Stopwatch();
     }
 
     public void Start()
     {
+        Deltatime.Start();
+
         do
         {
-            Step();
+            if (Deltatime.ElapsedMilliseconds >= TickRate)
+            {
+                Step();
+                Deltatime.Restart();
+            }
         } while (!Keyboard.IsKeyDown(Key.Escape));
 
         throw new Exception(); //For testing

@@ -11,16 +11,16 @@ public class ConsoleView
     public Mino[][] Grid { get; }
     public int ScoreTracker { get; set; }
 
-    public bool Scalable { get; }
     public bool Offsetable { get; }
+    public bool Scalable { get; }
 
-    // The following are set using UpdateScreenMath() in DrawScreen(). Expressions were too performance-intensive
-    public int ScreenWidth { get; set; }
-    public int ScreenHeight { get; set; }
+    // ScreenMath
+    public int ScreenWidth { get; set; } = Console.WindowWidth;
+    public int ScreenHeight { get; set; } = Console.WindowHeight;
     public int YScale { get; set; } = 1;
     public int XScale { get; set; } = 2;
-    public int GridXOffset { get; set; }
-    public int GridYOffset { get; set; }
+    public int GridXOffset { get; set; } = 0;
+    public int GridYOffset { get; set; } = 0;
 
     public ConsoleView(Game game, bool scalable = false, bool offsetable = false)
     {
@@ -28,8 +28,8 @@ public class ConsoleView
         Grid = game.Grid;
         ScoreTracker = game.Score;
 
-        Scalable = scalable;
         Offsetable = offsetable;
+        Scalable = scalable;
 
         Console.CursorVisible = false;
 
@@ -171,17 +171,17 @@ public class ConsoleView
         ScreenWidth = Console.WindowWidth;
         ScreenHeight = Console.WindowHeight;
 
+        if (Offsetable)
+        {
+            GridXOffset = (Console.WindowWidth - Game.Width * XScale) / 2;
+            GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
+        }
+
         if (Scalable)
         {
             YScale = (Console.WindowWidth / (Game.Width * 2) < Console.WindowHeight / Game.Height) ?
                         Console.WindowWidth / (Game.Width * 2) : Console.WindowHeight / Game.Height;
             XScale = YScale * 2;
-        }
-
-        if (Offsetable)
-        {
-            GridXOffset = (Console.WindowWidth - Game.Width * XScale) / 2;
-            GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
         }
     }
 
