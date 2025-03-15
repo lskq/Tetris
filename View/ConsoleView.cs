@@ -1,4 +1,3 @@
-using System.Windows;
 using Tetris.Model;
 
 namespace Tetris.View;
@@ -13,11 +12,9 @@ public class ConsoleView
     public int ScoreTracker { get; set; }
     public int ScreenWidth { get; set; }
     public int ScreenHeight { get; set; }
-    
-    public int Scale => (Console.WindowWidth / (Game.Width * 2) < Console.WindowHeight / Game.Height) ?
-                            Console.WindowWidth / (Game.Width * 2) : Console.WindowHeight / Game.Height;
-    public int GridWidthOffset => (Console.WindowWidth - Game.Width * 2 * Scale) / 2;
-    public int GridHeightOffset => (Console.WindowHeight - Game.Height * Scale) / 2;
+
+    public int GridWidthOffset => (Console.WindowWidth - Game.Width * 2) / 2;
+    public int GridHeightOffset => (Console.WindowHeight - Game.Height) / 2;
 
     public ConsoleView(Game game)
     {
@@ -35,21 +32,28 @@ public class ConsoleView
 
     public void Step()
     {
-        if (ScreenWidth != Console.WindowWidth || ScreenHeight != Console.WindowHeight)
+        try
         {
-            ScreenWidth = Console.WindowWidth;
-            ScreenHeight = Console.WindowHeight;
-            
+            if (ScreenWidth != Console.WindowWidth || ScreenHeight != Console.WindowHeight)
+            {
+                ScreenWidth = Console.WindowWidth;
+                ScreenHeight = Console.WindowHeight;
+
+                DrawScreen();
+            }
+            else if (!Game.GameOver)
+            {
+                DrawMinoesInGrid();
+            }
+            else
+            {
+                DrawGameOver();
+            }
+        }
+        catch (ArgumentOutOfRangeException)
+        {
             ValidateScreenSize();
             DrawScreen();
-        }
-        else if (!Game.GameOver)
-        {   
-            DrawMinoesInGrid();
-        }
-        else
-        {
-            DrawGameOver();
         }
     }
 
@@ -63,11 +67,11 @@ public class ConsoleView
             }
         }
     }
-    
+
     public void DrawMino(int x, int y)
     {
         string color;
-        
+
         if (Grid[y][x] == null)
         {
             color = GetColor(ConsoleColor.Grid);
@@ -76,17 +80,18 @@ public class ConsoleView
         {
             color = GetColor(Grid[y][x].MinoColor);
         }
-        
-        DrawPixel(GridWidthOffset + x * 2 * Scale, GridHeightOffset + y * Scale, color);
+
+        Console.SetCursorPosition(GridWidthOffset + x * 2, GridHeightOffset + y);
+        Console.Write(color + "  ");
     }
 
     public void DrawGameOver()
     {
         string message = "Game Over";
 
-        int x = GridWidthOffset + (Game.Width * 2 * Scale) / 2 - message.Length / 2;
-        int y = GridHeightOffset + (Game.Height * Scale) / 2;
-        
+        int x = GridWidthOffset + Game.Width * 2 / 2 - message.Length / 2;
+        int y = GridHeightOffset + Game.Height / 2;
+
         Console.SetCursorPosition(x, y);
         Console.Write(message);
     }
@@ -101,11 +106,11 @@ public class ConsoleView
 
             int currentWidth = Console.WindowWidth;
             int currentHeight = Console.WindowHeight;
-            
+
             do { } while (currentWidth == Console.WindowWidth && currentHeight == Console.WindowHeight);
         }
     }
-    
+
     public void DrawScreen()
     {
         DrawBackground();
@@ -115,24 +120,24 @@ public class ConsoleView
         {
             DrawMinoesInGrid();
         }
-            
-        
+
+
     }
-    
+
     public void DrawGrid()
     {
         string color = GetColor(ConsoleColor.Grid);
-        for (int y = 0; y < Game.Height * Scale; y++)
+        for (int y = 0; y < Game.Height; y++)
         {
             Console.SetCursorPosition(GridWidthOffset, GridHeightOffset + y);
-            
-            for (int x = 0; x < Game.Width * Scale; x++)
+
+            for (int x = 0; x < Game.Width; x++)
             {
                 Console.Write(color + "  ");
             }
         }
     }
-    
+
     public void DrawBackground()
     {
         string color = GetColor(ConsoleColor.Background);
@@ -142,18 +147,6 @@ public class ConsoleView
             for (int x = 0; x < Console.WindowWidth; x++)
             {
                 Console.Write(color + " ");
-            }
-        }
-    }
-    
-    public void DrawPixel(int left, int top, string colorCode)
-    {
-        for (int y = 0; y < Scale; y++)
-        {
-            for (int x = 0; x < Scale; x++)
-            {
-                Console.SetCursorPosition(left + x, top + y);
-                Console.Write(colorCode + "  ");
             }
         }
     }
@@ -168,7 +161,7 @@ public class ConsoleView
             _ => "\x1b[39;49m",
         };
     }
-    
+
     public static string GetColor(MinoColor minoColor)
     {
         return minoColor switch
