@@ -79,11 +79,11 @@ public class ConsoleView
 
         if (Grid[y][x] == null)
         {
-            color = GetColor(ConsoleColor.Grid);
+            color = ConsoleColor.Grid;
         }
         else
         {
-            color = GetColor(Grid[y][x].MinoColor);
+            color = GetMinoColor(Grid[y][x].MinoColor);
         }
 
         DrawPixel(GridXOffset + x * XScale, GridYOffset + y * YScale, color);
@@ -93,11 +93,11 @@ public class ConsoleView
     {
         string message = "Game Over";
 
-        int x = GridXOffset + (Game.Width * XScale) / 2 - message.Length / 2;
-        int y = GridYOffset + (Game.Height * YScale) / 2;
+        int x = GridXOffset + Game.Width * XScale / 2 - message.Length / 2;
+        int y = GridYOffset + Game.Height * YScale / 2;
 
         Console.SetCursorPosition(x, y);
-        Console.Write(message);
+        Console.Write(ConsoleColor.Grid + message);
     }
 
     public void ValidateScreenSize()
@@ -129,7 +129,7 @@ public class ConsoleView
 
     public void DrawGrid()
     {
-        string color = GetColor(ConsoleColor.Grid);
+        string color = ConsoleColor.Grid;
         for (int y = 0; y < Game.Height * YScale; y++)
         {
             Console.SetCursorPosition(GridXOffset, GridYOffset + y);
@@ -143,7 +143,7 @@ public class ConsoleView
 
     public void DrawBackground()
     {
-        string color = GetColor(ConsoleColor.Background);
+        string color = ConsoleColor.Background;
         for (int y = 0; y < Console.WindowHeight; y++)
         {
             Console.SetCursorPosition(0, y);
@@ -185,29 +185,18 @@ public class ConsoleView
         }
     }
 
-    public static string GetColor(ConsoleColor consoleColor)
-    {
-        return consoleColor switch
-        {
-            ConsoleColor.Default => "\x1b[39;49m",
-            ConsoleColor.Background => "\x1b[48;2;63;63;63m",
-            ConsoleColor.Grid => "\x1b[48;2;223;223;223m",
-            _ => "\x1b[39;49m",
-        };
-    }
-
-    public static string GetColor(MinoColor minoColor)
+    public static string GetMinoColor(MinoColor minoColor)
     {
         return minoColor switch
         {
-            MinoColor.Cyan => "\x1b[48;2;0;255;255m",
-            MinoColor.Blue => "\x1b[48;2;0;0;255m",
-            MinoColor.Orange => "\x1b[48;2;255;165;0m",
-            MinoColor.Yellow => "\x1b[48;2;255;255;0m",
-            MinoColor.Green => "\x1b[48;2;0;255;0m",
-            MinoColor.Purple => "\x1b[48;2;255;0;255m",
-            MinoColor.Red => "\x1b[48;2;255;0;0m",
-            _ => "\x1b[39;49m",
+            MinoColor.Cyan => ConsoleColor.Cyan,
+            MinoColor.Blue => ConsoleColor.Blue,
+            MinoColor.Orange => ConsoleColor.Orange,
+            MinoColor.Yellow => ConsoleColor.Yellow,
+            MinoColor.Green => ConsoleColor.Green,
+            MinoColor.Purple => ConsoleColor.Purple,
+            MinoColor.Red => ConsoleColor.Red,
+            _ => ConsoleColor.Default,
         };
     }
 }
