@@ -11,10 +11,9 @@ public class ConsoleView
     public Mino[][] Grid { get; }
     public int ScoreTracker { get; set; }
 
-    public bool Offsetable { get; }
-    public bool Scalable { get; }
-
     // ScreenMath
+    public bool Offsetable { get; set; } = false;
+    public bool Scalable { get; set; } = false;
     public int ScreenWidth { get; set; } = Console.WindowWidth;
     public int ScreenHeight { get; set; } = Console.WindowHeight;
     public int YScale { get; set; } = 1;
@@ -22,14 +21,11 @@ public class ConsoleView
     public int GridXOffset { get; set; } = 0;
     public int GridYOffset { get; set; } = 0;
 
-    public ConsoleView(Game game, bool scalable = false, bool offsetable = false)
+    public ConsoleView(Game game)
     {
         Game = game;
         Grid = game.Grid;
         ScoreTracker = game.Score;
-
-        Offsetable = offsetable;
-        Scalable = scalable;
 
         Console.CursorVisible = false;
 

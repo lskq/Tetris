@@ -7,49 +7,41 @@ namespace Tetris;
 
 public class Controller
 {
-    public Game Game { get; set; }
-    public ConsoleView View { get; set; }
-    public Stopwatch Deltatime { get; set; }
-    public int TickRate { get; set; } = 50;
+    public Game Game { get; }
+    public ConsoleView View { get; }
+    public Stopwatch GameDeltatime { get; set; } = new();
+    public Stopwatch ViewDeltatime { get; set; } = new();
+    public int GameTickRate { get; set; } = 25;
+    public int ViewTickRate { get; set; } = 25;
 
     public Controller(string[] args)
     {
-        bool offsetable = false;
-        bool scalable = false;
-
-        for (int i = 0; i < args.Length; i++)
-        {
-            if (args[i].Equals("-o"))
-                offsetable = true;
-            else if (args[i].Equals("-s"))
-                scalable = true;
-            else if (args[i].Equals("-t") && i + 1 < args.Length)
-            {
-                if (int.TryParse(args[i + 1], out int ticks))
-                {
-                    TickRate = ticks;
-                    i += 1;
-                }
-            }
-        }
-
         Game = new Game();
-        View = new ConsoleView(Game, offsetable, scalable);
-        Deltatime = new Stopwatch();
+        View = new ConsoleView(Game);
+
+        ParseArgs(args);
     }
 
     public void Start()
     {
-        Deltatime.Start();
+        GameDeltatime.Start();
+        ViewDeltatime.Start();
 
         do
         {
-            if (Deltatime.ElapsedMilliseconds >= TickRate)
+            if (GameDeltatime.ElapsedMilliseconds >= GameTickRate)
             {
-                Step();
-                Deltatime.Restart();
+                (int, int, int) input = GetPlayerInput();
+
+                Game.Step(input.Item1, input.Item2, input.Item3);
+                GameDeltatime.Restart();
             }
-        } while (!Keyboard.IsKeyDown(Key.Escape));
+            if (ViewDeltatime.ElapsedMilliseconds >= ViewTickRate)
+            {
+                View.Step();
+                ViewDeltatime.Restart();
+            }
+        } while (!Keyboard.IsKeyDown(Key.Q));
 
         throw new Exception(); //For testing
     }
@@ -76,5 +68,41 @@ public class Controller
         rotation += Keyboard.IsKeyDown(Key.OemPeriod) ? 1 : 0;
 
         return (xVector, yVector, rotation);
+    }
+
+    public void ParseArgs(string[] args)
+    {
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i].Equals("-o"))
+                View.Offsetable = true;
+            else if (args[i].Equals("-s"))
+                View.Scalable = true;
+            else if (args[i].Equals("-t") && i + 1 < args.Length)
+            {
+                if (int.TryParse(args[i + 1], out int ticks))
+                {
+                    GameTickRate = ticks;
+                    ViewTickRate = ticks;
+                    i += 1;
+                }
+            }
+            else if (args[i].Equals("-gt") && i + 1 < args.Length)
+            {
+                if (int.TryParse(args[i + 1], out int ticks))
+                {
+                    GameTickRate = ticks;
+                    i += 1;
+                }
+            }
+            else if (args[i].Equals("-vt") && i + 1 < args.Length)
+            {
+                if (int.TryParse(args[i + 1], out int ticks))
+                {
+                    ViewTickRate = ticks;
+                    i += 1;
+                }
+            }
+        }
     }
 }
