@@ -9,37 +9,30 @@ public class Controller
 {
     public Game Game { get; }
     public ConsoleView View { get; }
-    public Stopwatch GameDeltatime { get; set; } = new();
-    public Stopwatch ViewDeltatime { get; set; } = new();
-    public int GameTickRate { get; set; } = 25;
-    public int ViewTickRate { get; set; } = 25;
+    public Stopwatch Deltatime { get; set; } = new();
+    public int TickRate { get; set; } = 100;
 
     public Controller(string[] args)
     {
         (bool scalable, bool offsetable) = ParseArgs(args);
-        
+
         Game = new Game();
         View = new ConsoleView(Game, scalable, offsetable);
     }
 
     public void Start()
     {
-        GameDeltatime.Start();
-        ViewDeltatime.Start();
+        Deltatime.Start();
 
         do
         {
-            if (GameDeltatime.ElapsedMilliseconds >= GameTickRate)
+            if (Deltatime.ElapsedMilliseconds >= TickRate)
             {
                 (int, int, int) input = GetPlayerInput();
 
                 Game.Step(input.Item1, input.Item2, input.Item3);
-                GameDeltatime.Restart();
-            }
-            if (ViewDeltatime.ElapsedMilliseconds >= ViewTickRate)
-            {
                 View.Step();
-                ViewDeltatime.Restart();
+                Deltatime.Restart();
             }
         } while (!Keyboard.IsKeyDown(Key.Q));
 
@@ -74,7 +67,7 @@ public class Controller
     {
         bool offsetable = false;
         bool scalable = false;
-        
+
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i].Equals("-o"))
@@ -85,24 +78,7 @@ public class Controller
             {
                 if (int.TryParse(args[i + 1], out int ticks))
                 {
-                    GameTickRate = ticks;
-                    ViewTickRate = ticks;
-                    i += 1;
-                }
-            }
-            else if (args[i].Equals("-gt") && i + 1 < args.Length)
-            {
-                if (int.TryParse(args[i + 1], out int ticks))
-                {
-                    GameTickRate = ticks;
-                    i += 1;
-                }
-            }
-            else if (args[i].Equals("-vt") && i + 1 < args.Length)
-            {
-                if (int.TryParse(args[i + 1], out int ticks))
-                {
-                    ViewTickRate = ticks;
+                    TickRate = ticks;
                     i += 1;
                 }
             }

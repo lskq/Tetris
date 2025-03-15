@@ -41,7 +41,7 @@ public class Game
     {
         if (GameOver)
             return;
-        
+
         UpdateGrid(false);
 
         if (rotation != 0)
@@ -62,7 +62,7 @@ public class Game
                 CurrentTetromino.XAbsolute -= xInput;
         }
 
-        double yMovement =  GravityConstant + yInput * GravityConstant * 2;
+        double yMovement = GravityConstant + yInput * GravityConstant * 4;
         if (yMovement != 0)
         {
             CurrentTetromino.YAbsolute += yMovement;
