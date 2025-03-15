@@ -3,7 +3,7 @@ namespace Tetris.Model;
 public class Game
 {
     public const int Width = 10;
-    public const int Height = 10;
+    public const int Height = 20;
     public const int XInit = Width / 2;
     public const int YInit = 2;
     public const double GravityConstant = (double)Height / 50;
@@ -39,6 +39,9 @@ public class Game
 
     public void Step(int xInput, int yInput, int rotation)
     {
+        if (GameOver)
+            return;
+        
         UpdateGrid(false);
 
         if (rotation != 0)
@@ -59,7 +62,7 @@ public class Game
                 CurrentTetromino.XAbsolute -= xInput;
         }
 
-        double yMovement = yInput + GravityConstant;
+        double yMovement =  GravityConstant + yInput * GravityConstant * 2;
         if (yMovement != 0)
         {
             CurrentTetromino.YAbsolute += yMovement;

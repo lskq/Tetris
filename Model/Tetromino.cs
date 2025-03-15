@@ -37,7 +37,7 @@ public class Tetromino(int x, int y, Shape shape)
 
     public static Mino[] SetMinoes(Shape shape)
     {
-        Color color = Color.Cyan;
+        MinoColor minoColor = MinoColor.Cyan;
         (int, int)[] coords = new (int, int)[4];
 
         // Shapes are designed with the console in mind, so top left is (0,0)
@@ -45,7 +45,7 @@ public class Tetromino(int x, int y, Shape shape)
         {
             case Shape.I:
                 // ####
-                color = Color.Cyan;
+                minoColor = MinoColor.Cyan;
                 coords[0] = (-2, -1);
                 coords[1] = (-1, -1);
                 coords[2] = (0, -1);
@@ -55,7 +55,7 @@ public class Tetromino(int x, int y, Shape shape)
             case Shape.J:
                 // #
                 // ###
-                color = Color.Blue;
+                minoColor = MinoColor.Blue;
                 coords[0] = (-2, -2);
                 coords[1] = (-2, -1);
                 coords[2] = (-1, -1);
@@ -65,7 +65,7 @@ public class Tetromino(int x, int y, Shape shape)
             case Shape.L:
                 //   #
                 // ###
-                color = Color.Orange;
+                minoColor = MinoColor.Orange;
                 coords[0] = (-2, -1);
                 coords[1] = (-1, -1);
                 coords[2] = (0, -1);
@@ -75,7 +75,7 @@ public class Tetromino(int x, int y, Shape shape)
             case Shape.O:
                 // ##
                 // ##
-                color = Color.Yellow;
+                minoColor = MinoColor.Yellow;
                 coords[0] = (-1, -1);
                 coords[1] = (0, -1);
                 coords[2] = (-1, 0);
@@ -85,7 +85,7 @@ public class Tetromino(int x, int y, Shape shape)
             case Shape.S:
                 //  ##
                 // ##
-                color = Color.Green;
+                minoColor = MinoColor.Green;
                 coords[0] = (-2, -1);
                 coords[1] = (-1, -1);
                 coords[2] = (-1, -2);
@@ -95,7 +95,7 @@ public class Tetromino(int x, int y, Shape shape)
             case Shape.T:
                 // ###
                 //  #
-                color = Color.Purple;
+                minoColor = MinoColor.Purple;
                 coords[0] = (-1, -2);
                 coords[1] = (-2, -1);
                 coords[2] = (-1, -1);
@@ -105,7 +105,7 @@ public class Tetromino(int x, int y, Shape shape)
             case Shape.Z:
                 // ##
                 //  ##
-                color = Color.Red;
+                minoColor = MinoColor.Red;
                 coords[0] = (-2, -2);
                 coords[1] = (-1, -2);
                 coords[2] = (-1, -1);
@@ -117,7 +117,7 @@ public class Tetromino(int x, int y, Shape shape)
 
         for (int i = 0; i < 4; i++)
         {
-            minoes[i] = new Mino(coords[i].Item1, coords[i].Item2, color);
+            minoes[i] = new Mino(coords[i].Item1, coords[i].Item2, minoColor);
         }
 
         return minoes;

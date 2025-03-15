@@ -1,9 +1,9 @@
 namespace Tetris.Model;
 
-public class Mino(int x, int y, Color color)
+public class Mino(int x, int y, MinoColor minoColor)
 {
     public int XRelative { get; set; } = x;
     public int YRelative { get; set; } = y;
 
-    public Color Color { get; } = color;
+    public MinoColor MinoColor { get; } = minoColor;
 }

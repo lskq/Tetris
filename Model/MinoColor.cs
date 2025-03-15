@@ -1,6 +1,6 @@
 namespace Tetris.Model;
 
-public enum Color
+public enum MinoColor
 {
     Cyan,
     Blue,

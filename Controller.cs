@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Windows.Input;
 using Tetris.Model;
 using Tetris.View;
@@ -22,12 +23,8 @@ public class Controller
         do
         {
             Step();
-            Thread.Sleep(tickRate);
-        } while (!Keyboard.IsKeyDown(Key.Escape) && !Game.GameOver);
-
-        View.DrawGameOver();
-
-        do { } while (!Keyboard.IsKeyDown(Key.Escape));
+            //Thread.Sleep(tickRate);
+        } while (!Keyboard.IsKeyDown(Key.Escape));
 
         throw new Exception(); //For testing
     }
