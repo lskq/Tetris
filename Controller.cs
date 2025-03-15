@@ -16,10 +16,10 @@ public class Controller
 
     public Controller(string[] args)
     {
+        (bool scalable, bool offsetable) = ParseArgs(args);
+        
         Game = new Game();
-        View = new ConsoleView(Game);
-
-        ParseArgs(args);
+        View = new ConsoleView(Game, scalable, offsetable);
     }
 
     public void Start()
@@ -70,14 +70,17 @@ public class Controller
         return (xVector, yVector, rotation);
     }
 
-    public void ParseArgs(string[] args)
+    public (bool scalable, bool offsetable) ParseArgs(string[] args)
     {
+        bool offsetable = false;
+        bool scalable = false;
+        
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i].Equals("-o"))
-                View.Offsetable = true;
+                offsetable = true;
             else if (args[i].Equals("-s"))
-                View.Scalable = true;
+                scalable = true;
             else if (args[i].Equals("-t") && i + 1 < args.Length)
             {
                 if (int.TryParse(args[i + 1], out int ticks))
@@ -104,5 +107,7 @@ public class Controller
                 }
             }
         }
+
+        return (scalable, offsetable);
     }
 }

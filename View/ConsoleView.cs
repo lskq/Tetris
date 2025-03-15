@@ -5,15 +5,13 @@ namespace Tetris.View;
 
 public class ConsoleView
 {
-    public const string DefaultCode = "\x1b[0m";
-
     public Game Game { get; }
     public Mino[][] Grid { get; }
     public int ScoreTracker { get; set; }
 
     // ScreenMath
-    public bool Offsetable { get; set; } = false;
-    public bool Scalable { get; set; } = false;
+    public bool Scalable { get; set; }
+    public bool Offsetable { get; set; }
     public int ScreenWidth { get; set; } = Console.WindowWidth;
     public int ScreenHeight { get; set; } = Console.WindowHeight;
     public int YScale { get; set; } = 1;
@@ -21,11 +19,14 @@ public class ConsoleView
     public int GridXOffset { get; set; } = 0;
     public int GridYOffset { get; set; } = 0;
 
-    public ConsoleView(Game game)
+    public ConsoleView(Game game, bool scalable, bool offsetable)
     {
         Game = game;
         Grid = game.Grid;
         ScoreTracker = game.Score;
+        
+        Scalable = scalable;
+        Offsetable = offsetable;
 
         Console.CursorVisible = false;
 
@@ -42,7 +43,8 @@ public class ConsoleView
                 ValidateScreenSize();
                 DrawScreen();
             }
-            else if (!Game.GameOver)
+            
+            if (!Game.GameOver)
             {
                 DrawMinoesInGrid();
             }
@@ -53,8 +55,21 @@ public class ConsoleView
         }
         catch (ArgumentOutOfRangeException)
         {
-            ValidateScreenSize();
-            DrawScreen();
+            bool loop = true;
+            while (loop)
+            {
+                try
+                {
+                    ValidateScreenSize();
+                    DrawScreen();
+                    loop = false;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    // Try again
+                }
+            }
+            
         }
     }
 
@@ -167,17 +182,17 @@ public class ConsoleView
         ScreenWidth = Console.WindowWidth;
         ScreenHeight = Console.WindowHeight;
 
-        if (Offsetable)
-        {
-            GridXOffset = (Console.WindowWidth - Game.Width * XScale) / 2;
-            GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
-        }
-
         if (Scalable)
         {
             YScale = (Console.WindowWidth / (Game.Width * 2) < Console.WindowHeight / Game.Height) ?
                         Console.WindowWidth / (Game.Width * 2) : Console.WindowHeight / Game.Height;
             XScale = YScale * 2;
+        }
+        
+        if (Offsetable)
+        {
+            GridXOffset = (Console.WindowWidth - Game.Width * XScale) / 2;
+            GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
         }
     }
 
