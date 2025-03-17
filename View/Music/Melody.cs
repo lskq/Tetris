@@ -1,4 +1,4 @@
-namespace JukeboxProofOfConcept;
+namespace Tetris.View.Music;
 
 public class Melody((Tone, Note)[] tune, int bpm)
 {

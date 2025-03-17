@@ -1,4 +1,4 @@
-namespace JukeboxProofOfConcept;
+namespace Tetris.View.Music;
 
 public enum Note
 {
