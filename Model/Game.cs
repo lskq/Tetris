@@ -14,6 +14,7 @@ public class Game
 
     public int Score { get; set; }
     public bool GameOver { get; set; }
+    public bool Switching { get; set; }
     public Mino[][] Grid { get; set; }
     public Tetromino CurrentTetromino { get; set; }
     public Tetromino NextTetromino { get; set; }
@@ -24,6 +25,7 @@ public class Game
 
         Score = 0;
         GameOver = false;
+        Switching = false;
 
         Grid = new Mino[Height][];
         for (int i = 0; i < Height; i++)
@@ -41,6 +43,9 @@ public class Game
     {
         if (GameOver)
             return;
+
+        if (Switching)
+            Switching = false;
 
         UpdateGrid(false);
 
@@ -75,6 +80,7 @@ public class Game
 
                 UpdateGrid(true);
                 NewTetromino();
+                Switching = true;
             }
         }
 
