@@ -1,4 +1,3 @@
-using System.Windows;
 using Tetris.Model;
 
 namespace Tetris.View;
