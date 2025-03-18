@@ -104,6 +104,8 @@ public class Game
 
     public void CheckScore()
     {
+        int numScores = 0;
+
         for (int y = 0; y < Height; y++)
         {
             bool scored = true;
@@ -126,9 +128,11 @@ public class Game
                 }
                 Grid[0] = new Mino[10];
 
-                Score++;
+                numScores++;
             }
         }
+
+        Score += (numScores > 0) ? (int)Math.Pow(2, numScores - 1) * 100 : 0;
     }
 
     public bool IsColliding()
