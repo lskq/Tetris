@@ -32,7 +32,7 @@ public class ConsoleView
         ValidateScreenSize();
         DrawScreen();
 
-        var musicTask = MusicPlayer.Play(Melody.GetTetrisA(), token);
+        var musicTask = Task.Run(() => MusicPlayer.Play(Melody.GetTetrisA()), token);
     }
 
     public void Step()

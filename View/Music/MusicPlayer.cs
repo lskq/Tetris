@@ -2,7 +2,7 @@ namespace Tetris.View.Music;
 
 public static class MusicPlayer
 {
-    public static async Task Play(Melody melody, CancellationToken token)
+    public static void Play(Melody melody)
     {
         var tune = melody.Tune;
         int mpsb = melody.Mpsb;
@@ -10,7 +10,7 @@ public static class MusicPlayer
         int i = 0;
         int len = melody.Tune.Length;
 
-        while (!token.IsCancellationRequested)
+        while (true)
         {
             var tone = tune[i];
 
@@ -20,10 +20,10 @@ public static class MusicPlayer
 
             if (freq != 0)
             {
-                await Task.Run(() => Console.Beep(freq, time));
+                Console.Beep(freq, time);
             }
             else
-                await Task.Delay(time);
+                Thread.Sleep(time);
 
             if (i + 1 < len)
                 i++;
