@@ -51,7 +51,6 @@ public class ConsoleView
             if (Game.Switching)
             {
                 DrawNextPanel();
-                DrawMinoesInNext();
             }
 
             if (Game.Score != ScoreTracker)
@@ -65,7 +64,7 @@ public class ConsoleView
             }
             else
             {
-                DrawMinoesInGrid();
+                DrawGrid();
             }
         }
         catch (ArgumentOutOfRangeException)
@@ -88,7 +87,7 @@ public class ConsoleView
         }
     }
 
-    public void DrawMinoesInNext()
+    public void UpdateNextPanel()
     {
         foreach (Mino mino in Game.NextTetromino.Minoes)
         {
@@ -97,11 +96,14 @@ public class ConsoleView
         }
     }
 
-    public void DrawMinoesInGrid()
+    public void DrawGrid()
     {
-        for (int x = 0; x < Game.Width; x++)
+
+        for (int y = 0; y < Game.Height; y++)
         {
-            for (int y = 0; y < Game.Height; y++)
+            string row = "";
+
+            for (int x = 0; x < Game.Width; x++)
             {
                 string color;
 
@@ -114,7 +116,16 @@ public class ConsoleView
                     color = GetMinoColor(Grid[y][x].MinoColor);
                 }
 
-                DrawPixel(GridXOffset + x * XScale, GridYOffset + y * YScale, color);
+                for (int i = 0; i < XScale; i++)
+                {
+                    row += color + " ";
+                }
+            }
+
+            for (int i = 0; i < YScale; i++)
+            {
+                Console.SetCursorPosition(GridXOffset, GridYOffset + i + y * YScale);
+                Console.Write(row);
             }
         }
     }
@@ -152,12 +163,11 @@ public class ConsoleView
         DrawGrid();
         DrawMainPanel();
         DrawNextPanel();
-        DrawMinoesInNext();
         DrawScore();
 
         if (Game.GameOver)
         {
-            DrawMinoesInGrid();
+            DrawGrid();
         }
     }
 
@@ -184,6 +194,8 @@ public class ConsoleView
 
         Console.SetCursorPosition(NextPanelXOffset + 2 * XScale - 2, NextPanelYOffset + 4 * YScale - 1);
         Console.Write("NEXT");
+
+        UpdateNextPanel();
     }
 
     public void DrawMainPanel()
@@ -197,19 +209,6 @@ public class ConsoleView
                 row += " ";
             }
             Console.Write(row);
-        }
-    }
-
-    public void DrawGrid()
-    {
-        for (int y = 0; y < Game.Height * YScale; y++)
-        {
-            Console.SetCursorPosition(GridXOffset, GridYOffset + y);
-            string row = ConsoleColor.Grid;
-            for (int x = 0; x < Game.Width * XScale; x++)
-            {
-                row += " ";
-            }
         }
     }
 
