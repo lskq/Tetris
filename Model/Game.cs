@@ -126,7 +126,7 @@ public class Game
                 {
                     Grid[i] = Grid[i - 1];
                 }
-                Grid[0] = new Mino[10];
+                Grid[0] = new Mino[Width];
 
                 numScores++;
             }
