@@ -18,7 +18,6 @@ class Program
             Console.Clear();
             Console.CursorVisible = true;
             Console.WriteLine(e.ToString());
-            Console.In.Dispose();
         }
     }
 }
