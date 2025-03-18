@@ -20,7 +20,7 @@ public static class MusicPlayer
 
             if (freq != 0)
             {
-                Console.Beep(freq, time);
+                await Task.Run(() => Console.Beep(freq, time));
             }
             else
                 await Task.Delay(time);

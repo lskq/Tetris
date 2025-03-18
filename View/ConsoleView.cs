@@ -1,4 +1,5 @@
 using Tetris.Model;
+using Tetris.View.Music;
 
 namespace Tetris.View;
 
@@ -9,8 +10,6 @@ public class ConsoleView
     public int ScoreTracker { get; set; }
 
     // ScreenMath
-    public bool Scalable { get; set; }
-    public bool Offsetable { get; set; }
     public int ScreenWidth { get; set; } = Console.WindowWidth;
     public int ScreenHeight { get; set; } = Console.WindowHeight;
     public int YScale { get; set; } = 1;
@@ -22,19 +21,18 @@ public class ConsoleView
     public int NextPanelXOffset { get; set; } = 0;
     public int NextPanelYOffset { get; set; } = 0;
 
-    public ConsoleView(Game game, bool scalable, bool offsetable)
+    public ConsoleView(Game game, CancellationToken token)
     {
         Game = game;
         Grid = game.Grid;
         ScoreTracker = game.Score;
 
-        Scalable = scalable;
-        Offsetable = offsetable;
-
         Console.CursorVisible = false;
 
         ValidateScreenSize();
         DrawScreen();
+
+        var musicTask = MusicPlayer.Play(Melody.GetTetrisA(), token);
     }
 
     public void Step()
@@ -242,20 +240,15 @@ public class ConsoleView
         ScreenWidth = Console.WindowWidth;
         ScreenHeight = Console.WindowHeight;
 
-        if (Scalable)
-        {
-            int xRatio = Console.WindowWidth / (Game.Width * 2);
-            int yRatio = Console.WindowHeight / Game.Height;
+        int xRatio = Console.WindowWidth / (Game.Width * 2);
+        int yRatio = Console.WindowHeight / Game.Height;
 
-            YScale = xRatio < yRatio ? xRatio : yRatio;
-            XScale = YScale * 2;
-        }
+        YScale = xRatio < yRatio ? xRatio : yRatio;
+        XScale = YScale * 2;
 
-        if (Offsetable)
-        {
-            GridXOffset = (Console.WindowWidth - 2 * Game.Width * XScale) / 2;
-            GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
-        }
+        GridXOffset = (Console.WindowWidth - 2 * Game.Width * XScale) / 2;
+        GridYOffset = (Console.WindowHeight - Game.Height * YScale) / 2;
+
 
         MainPanelXOffset = GridXOffset + Game.Width * XScale;
         MainPanelYOffset = GridYOffset;

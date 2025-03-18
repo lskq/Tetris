@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using Tetris.Model;
 using Tetris.View;
+using Tetris.View.Music;
 
 namespace Tetris;
 
@@ -9,15 +10,18 @@ public class Controller
 {
     public Game Game { get; }
     public ConsoleView View { get; }
+
+    public CancellationTokenSource Source { get; } = new();
+
     public Stopwatch Deltatime { get; set; } = new();
     public int TickRate { get; set; } = 100;
 
-    public Controller(string[] args)
+    public Controller()
     {
-        (bool scalable, bool offsetable) = ParseArgs(args);
-
         Game = new Game();
-        View = new ConsoleView(Game, scalable, offsetable);
+        View = new ConsoleView(Game, Source.Token);
+
+        var keyTask = Task.Run(() => ConsoleKeyIntercept(), Source.Token);
     }
 
     public void Start()
@@ -26,28 +30,37 @@ public class Controller
 
         do
         {
-            if (Deltatime.ElapsedMilliseconds >= TickRate)
-            {
-                (int, int, int) input = GetPlayerInput();
+            Step();
+        } while (!Keyboard.IsKeyDown(Key.Escape));
 
-                Game.Step(input.Item1, input.Item2, input.Item3);
-                View.Step();
-                Deltatime.Restart();
-            }
-        } while (!Keyboard.IsKeyDown(Key.Q));
-
-        throw new Exception(); //For testing
+        Source.Cancel();
+        Console.Write("\x1b[0m");
+        Console.Clear();
+        Console.CursorVisible = true;
     }
 
     public void Step()
     {
-        (int, int, int) input = GetPlayerInput();
+        if (Deltatime.ElapsedMilliseconds >= TickRate)
+        {
+            (int xInput, int yInput, int rotation) = ReadPlayerInput();
 
-        Game.Step(input.Item1, input.Item2, input.Item3);
-        View.Step();
+            Game.Step(xInput, yInput, rotation);
+            View.Step();
+            Deltatime.Restart();
+        }
     }
 
-    public (int, int, int) GetPlayerInput()
+    public void ConsoleKeyIntercept()
+    {
+        while (true)
+        {
+            if (Console.KeyAvailable)
+                Console.ReadKey(true);
+        }
+    }
+
+    public (int, int, int) ReadPlayerInput()
     {
         int xVector = 0;
         int yVector = 0;
@@ -57,10 +70,15 @@ public class Controller
         xVector += Keyboard.IsKeyDown(Key.Right) ? 1 : 0;
         yVector += Keyboard.IsKeyDown(Key.Down) ? 1 : 0;
 
-        rotation += Keyboard.IsKeyDown(Key.OemComma) ? -1 : 0;
-        rotation += Keyboard.IsKeyDown(Key.OemPeriod) ? 1 : 0;
+        rotation += Keyboard.IsKeyDown(Key.Z) ? -1 : 0;
+        rotation += Keyboard.IsKeyDown(Key.X) ? 1 : 0;
 
         return (xVector, yVector, rotation);
+    }
+
+    public static bool ConsoleIsKeyDown(ConsoleKey key)
+    {
+        return Console.KeyAvailable && Console.ReadKey(true).Key == key;
     }
 
     public (bool scalable, bool offsetable) ParseArgs(string[] args)
