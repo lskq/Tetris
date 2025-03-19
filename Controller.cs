@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Windows.Input;
 using Tetris.Model;
 using Tetris.View;
-using Tetris.View.Music;
 
 namespace Tetris;
 
