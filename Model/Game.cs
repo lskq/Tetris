@@ -41,11 +41,11 @@ public class Game
 
     public void Step(int xInput, int yInput, int rotation)
     {
-        if (GameOver)
-            return;
-
         if (Switching)
             Switching = false;
+
+        if (GameOver)
+            return;
 
         UpdateGrid(false);
 
