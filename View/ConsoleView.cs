@@ -140,7 +140,7 @@ public class ConsoleView
 
     public void ValidateScreenSize()
     {
-        while (Console.WindowWidth < Game.Width * 2 || Console.WindowHeight < Game.Height)
+        while (Console.WindowWidth < Game.Width * 4 || Console.WindowHeight < Game.Height)
         {
             DrawBackground();
             Console.SetCursorPosition(0, 0);
@@ -240,7 +240,7 @@ public class ConsoleView
         ScreenWidth = Console.WindowWidth;
         ScreenHeight = Console.WindowHeight;
 
-        int xRatio = Console.WindowWidth / (Game.Width * 2);
+        int xRatio = Console.WindowWidth / (Game.Width * 4);
         int yRatio = Console.WindowHeight / Game.Height;
 
         YScale = xRatio < yRatio ? xRatio : yRatio;
