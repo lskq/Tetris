@@ -1,4 +1,6 @@
-﻿namespace Tetris;
+﻿using Tetris.Controller;
+
+namespace Tetris;
 
 class Program
 {
@@ -6,7 +8,7 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
-        Controller controller = new();
+        ConsoleController controller = new();
         controller.Start();
     }
 }

@@ -3,9 +3,9 @@ using System.Windows.Input;
 using Tetris.Model;
 using Tetris.View;
 
-namespace Tetris;
+namespace Tetris.Controller;
 
-public class Controller
+public class ConsoleController
 {
     public Game Game { get; }
     public ConsoleView View { get; }
@@ -15,7 +15,7 @@ public class Controller
     public Stopwatch Deltatime { get; set; } = new();
     public int TickRate { get; set; } = 100;
 
-    public Controller()
+    public ConsoleController()
     {
         Game = new Game();
         View = new ConsoleView(Game, Source.Token);
