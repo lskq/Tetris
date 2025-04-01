@@ -1,6 +1,6 @@
 Requirements:\
 -Dotnet 8.x Windows\
--A console window that can display at least 20 characters both vertically and horizontally\
+-A console window that can display at least 20 characters vertically and 40 horizontally\
 \
 Features:\
 -Scalable, self-centering UI: You can resize the console window in real-time.\
